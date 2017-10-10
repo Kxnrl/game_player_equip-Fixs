@@ -6,18 +6,30 @@
 
 StringMap g_aWeapons[2];
 
+enum SERVERS
+{
+    GM_ZE,
+    GM_NONE
+}
+SERVERS g_eServer;
+
 public Plugin myinfo =
 {
     name        = "game_player_equip fixs",
     author      = "Kyle",
     description = "fix ze map infinite ammo and usp_silencer",
-    version     = "1.0",
+    version     = "1.1",
     url         = "http://steamcommunity.com/id/_xQy_/"
 };
 
 public void OnPluginStart()
 {
     InitWeapon();
+}
+
+public void OnMapStart()
+{
+    g_eServer = (FindPluginByFile("zombiereloaded.smx") != INVALID_HANDLE) ? GM_ZE : GM_NONE;
 }
 
 public void OnEntityCreated(int entity, const char[] classname)
@@ -98,39 +110,37 @@ void InitWeapon()
     g_aWeapons[CLIP] = CreateTrie();
     g_aWeapons[AMMO] = CreateTrie();
 
-    
-    // you need change these values to edit your clip.
-    SetTrieValue(g_aWeapons[CLIP], "weapon_ak47"          , 90 ); SetTrieValue(g_aWeapons[AMMO], "weapon_ak47"          , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_aug"           , 90 ); SetTrieValue(g_aWeapons[AMMO], "weapon_aug"           , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_awp"           , 30 ); SetTrieValue(g_aWeapons[AMMO], "weapon_awp"           , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_bizon"         , 128); SetTrieValue(g_aWeapons[AMMO], "weapon_bizon"         , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_cz75a"         , 36 ); SetTrieValue(g_aWeapons[AMMO], "weapon_cz75a"         , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_deagle"        , 21 ); SetTrieValue(g_aWeapons[AMMO], "weapon_deagle"        , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_elite"         , 60 ); SetTrieValue(g_aWeapons[AMMO], "weapon_elite"         , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_famas"         , 75 ); SetTrieValue(g_aWeapons[AMMO], "weapon_famas"         , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_fiveseven"     , 40 ); SetTrieValue(g_aWeapons[AMMO], "weapon_fiveseven"     , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_g3sg1"         , 40 ); SetTrieValue(g_aWeapons[AMMO], "weapon_g3sg1"         , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_galilar"       , 105); SetTrieValue(g_aWeapons[AMMO], "weapon_galilar"       , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_glock"         , 40 ); SetTrieValue(g_aWeapons[AMMO], "weapon_glock"         , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_hkp2000"       , 26 ); SetTrieValue(g_aWeapons[AMMO], "weapon_hkp2000"       , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_m4a1"          , 90 ); SetTrieValue(g_aWeapons[AMMO], "weapon_m4a1"          , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_m4a1_silencer" , 75 ); SetTrieValue(g_aWeapons[AMMO], "weapon_m4a1_silencer" , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_m249"          , 200); SetTrieValue(g_aWeapons[AMMO], "weapon_m249"          , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_mac10"         , 90 ); SetTrieValue(g_aWeapons[AMMO], "weapon_mac10"         , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_mag7"          ,  5 ); SetTrieValue(g_aWeapons[AMMO], "weapon_mag7"          , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_mp7"           , 90 ); SetTrieValue(g_aWeapons[AMMO], "weapon_mp7"           , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_mp9"           , 90 ); SetTrieValue(g_aWeapons[AMMO], "weapon_mp9"           , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_negev"         , 250); SetTrieValue(g_aWeapons[AMMO], "weapon_negev"         , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_nova"          ,  8 ); SetTrieValue(g_aWeapons[AMMO], "weapon_nova"          , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_p90"           , 100); SetTrieValue(g_aWeapons[AMMO], "weapon_p90"           , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_p250"          , 26 ); SetTrieValue(g_aWeapons[AMMO], "weapon_p250"          , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_revolver"      , 16 ); SetTrieValue(g_aWeapons[AMMO], "weapon_revolver"      , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_sawedoff"      ,  7 ); SetTrieValue(g_aWeapons[AMMO], "weapon_sawedoff"      , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_sg556"         , 90 ); SetTrieValue(g_aWeapons[AMMO], "weapon_sg556"         , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_ssg08"         , 30 ); SetTrieValue(g_aWeapons[AMMO], "weapon_ssg08"         , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_tec9"          , 36 ); SetTrieValue(g_aWeapons[AMMO], "weapon_tec9"          , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_ump45"         , 75 ); SetTrieValue(g_aWeapons[AMMO], "weapon_ump45"         , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_usp_silencer"  , 36 ); SetTrieValue(g_aWeapons[AMMO], "weapon_usp_silencer"  , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_xm1014"        ,  7 ); SetTrieValue(g_aWeapons[AMMO], "weapon_xm1014"        , 900);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_scar20"        , 40 ); SetTrieValue(g_aWeapons[AMMO], "weapon_scar20"        , 900);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_ak47"          , (g_eServer == GM_ZE) ?  90 :  30); SetTrieValue(g_aWeapons[AMMO], "weapon_ak47"          ,  90);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_aug"           , (g_eServer == GM_ZE) ?  90 :  30); SetTrieValue(g_aWeapons[AMMO], "weapon_aug"           ,  90);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_awp"           , (g_eServer == GM_ZE) ?  30 :  10); SetTrieValue(g_aWeapons[AMMO], "weapon_awp"           ,  30);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_bizon"         , (g_eServer == GM_ZE) ? 128 :  64); SetTrieValue(g_aWeapons[AMMO], "weapon_bizon"         , 120);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_cz75a"         , (g_eServer == GM_ZE) ?  36 :  12); SetTrieValue(g_aWeapons[AMMO], "weapon_cz75a"         ,  12);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_deagle"        , (g_eServer == GM_ZE) ?  21 :   7); SetTrieValue(g_aWeapons[AMMO], "weapon_deagle"        ,  35);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_elite"         , (g_eServer == GM_ZE) ?  60 :  30); SetTrieValue(g_aWeapons[AMMO], "weapon_elite"         , 120);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_famas"         , (g_eServer == GM_ZE) ?  75 :  25); SetTrieValue(g_aWeapons[AMMO], "weapon_famas"         ,  90);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_fiveseven"     , (g_eServer == GM_ZE) ?  40 :  20); SetTrieValue(g_aWeapons[AMMO], "weapon_fiveseven"     , 100);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_g3sg1"         , (g_eServer == GM_ZE) ?  40 :  20); SetTrieValue(g_aWeapons[AMMO], "weapon_g3sg1"         ,  90);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_galilar"       , (g_eServer == GM_ZE) ? 105 :  35); SetTrieValue(g_aWeapons[AMMO], "weapon_galilar"       ,  90);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_glock"         , (g_eServer == GM_ZE) ?  40 :  20); SetTrieValue(g_aWeapons[AMMO], "weapon_glock"         , 120);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_hkp2000"       , (g_eServer == GM_ZE) ?  26 :  13); SetTrieValue(g_aWeapons[AMMO], "weapon_hkp2000"       ,  52);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_m4a1"          , (g_eServer == GM_ZE) ?  90 :  30); SetTrieValue(g_aWeapons[AMMO], "weapon_m4a1"          ,  90);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_m4a1_silencer" , (g_eServer == GM_ZE) ?  75 :  20); SetTrieValue(g_aWeapons[AMMO], "weapon_m4a1_silencer" ,  40);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_m249"          , (g_eServer == GM_ZE) ? 200 : 100); SetTrieValue(g_aWeapons[AMMO], "weapon_m249"          , 200);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_mac10"         , (g_eServer == GM_ZE) ?  90 :  30); SetTrieValue(g_aWeapons[AMMO], "weapon_mac10"         ,  90);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_mag7"          , (g_eServer == GM_ZE) ?   5 :   5); SetTrieValue(g_aWeapons[AMMO], "weapon_mag7"          ,  32);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_mp7"           , (g_eServer == GM_ZE) ?  90 :  30); SetTrieValue(g_aWeapons[AMMO], "weapon_mp7"           ,  90);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_mp9"           , (g_eServer == GM_ZE) ?  90 :  30); SetTrieValue(g_aWeapons[AMMO], "weapon_mp9"           , 120);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_negev"         , (g_eServer == GM_ZE) ? 250 : 150); SetTrieValue(g_aWeapons[AMMO], "weapon_negev"         , 200);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_nova"          , (g_eServer == GM_ZE) ?   8 :   8); SetTrieValue(g_aWeapons[AMMO], "weapon_nova"          ,  32);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_p90"           , (g_eServer == GM_ZE) ? 100 :  50); SetTrieValue(g_aWeapons[AMMO], "weapon_p90"           , 100);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_p250"          , (g_eServer == GM_ZE) ?  26 :  13); SetTrieValue(g_aWeapons[AMMO], "weapon_p250"          ,  26);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_revolver"      , (g_eServer == GM_ZE) ?  16 :   8); SetTrieValue(g_aWeapons[AMMO], "weapon_revolver"      ,   8);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_sawedoff"      , (g_eServer == GM_ZE) ?   7 :   7); SetTrieValue(g_aWeapons[AMMO], "weapon_sawedoff"      ,  32);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_sg556"         , (g_eServer == GM_ZE) ?  90 :  30); SetTrieValue(g_aWeapons[AMMO], "weapon_sg556"         ,  90);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_ssg08"         , (g_eServer == GM_ZE) ?  30 :  10); SetTrieValue(g_aWeapons[AMMO], "weapon_ssg08"         ,  30);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_tec9"          , (g_eServer == GM_ZE) ?  36 :  18); SetTrieValue(g_aWeapons[AMMO], "weapon_tec9"          , 120);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_ump45"         , (g_eServer == GM_ZE) ?  75 :  25); SetTrieValue(g_aWeapons[AMMO], "weapon_ump45"         ,  75);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_usp_silencer"  , (g_eServer == GM_ZE) ?  36 :  12); SetTrieValue(g_aWeapons[AMMO], "weapon_usp_silencer"  ,  24);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_xm1014"        , (g_eServer == GM_ZE) ?   7 :   7); SetTrieValue(g_aWeapons[AMMO], "weapon_xm1014"        ,  32);
+    SetTrieValue(g_aWeapons[CLIP], "weapon_scar20"        , (g_eServer == GM_ZE) ?  40 :  20); SetTrieValue(g_aWeapons[AMMO], "weapon_scar20"        ,  90);
 }
