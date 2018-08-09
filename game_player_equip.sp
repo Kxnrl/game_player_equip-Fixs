@@ -3,7 +3,7 @@ public Plugin myinfo =
     name        = "game_player_equip fixs",
     author      = "Kyle",
     description = "infinite ammo and usp_silencer",
-    version     = "1.2",
+    version     = "1.3",
     url         = "https://kxnrl.com"
 };
 
@@ -44,37 +44,45 @@ public void OnUsePost(int entity, int client, int caller, UseType type, float va
         GetEntPropString(entity, Prop_Data, "m_weaponNames", weapon, 32, index);
         
         if(strcmp(weapon, "weapon_usp_silencer", false) == 0)
-            GiveUSP(client, flag);
+            HandleUSP(client, flag);
 
         if(strcmp(weapon, "ammo_50AE", false) == 0)
             InfiniteAmmo(client);
     }
 }
 
-void GiveUSP(int client, int flags)
+void HandleUSP(int client, int flags)
 {
     int usp = GetPlayerWeaponSlot(client, 1);
 
     if(usp == -1)
     {
-        GivePlayerItem(client, "weapon_usp_silencer");
+        RequestFrame(GiveUSP, client);
         return;
     }
 
     if(flags & 2 || flags & 4)
     {
-        if(usp != -1)
-            AcceptEntityInput(usp, "KillHierarchy");
+        RequestFrame(GiveUSP, client);
+        return;
     }
     else
     {
         char classname[32];
         if(GetWeaponClassname(usp, classname, 32) && (strcmp(classname, "weapon_usp_silencer", false) == 0 || strcmp(classname, "weapon_hkp2000", false) == 0) && GetEntProp(usp, Prop_Send, "m_hPrevOwner") == -1)
             return;
-        else
-            AcceptEntityInput(usp, "KillHierarchy");
+
+        AcceptEntityInput(usp, "KillHierarchy");
     }
 
+    GiveUSP(client);
+}
+
+void GiveUSP(int client)
+{
+    if(!IsClientInGame(client) || !IsPlayerAlive(client))
+        return;
+    
     GivePlayerItem(client, "weapon_usp_silencer");
 }
 
