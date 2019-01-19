@@ -3,7 +3,7 @@ public Plugin myinfo =
     name        = "game_player_equip fixs",
     author      = "Kyle",
     description = "infinite ammo and usp_silencer",
-    version     = "1.3",
+    version     = "1.4",
     url         = "https://kxnrl.com"
 };
 
@@ -16,7 +16,13 @@ public Plugin myinfo =
 #define CLIP 0
 #define AMMO 1
 
-StringMap g_aWeapons[2];
+enum struct weapon_t
+{
+    StringMap m_Clip;
+    StringMap m_Ammo;
+}
+
+static weapon_t g_Weapons;
 
 public void OnPluginStart()
 {
@@ -103,7 +109,7 @@ void ReserveAmmoClient(int client, int slot)
     GetWeaponClassname(weapon, classname, 32);
 
     int maxclip;
-    if(!GetTrieValue(g_aWeapons[CLIP], classname, maxclip))
+    if(!GetTrieValue(g_Weapons.m_Clip, classname, maxclip))
         return;
 
     SetEntProp(weapon, Prop_Send, "m_iClip1", maxclip, 4, 0);
@@ -114,7 +120,7 @@ void ReserveAmmoClient(int client, int slot)
         return;
 
     int maxammo;
-    if(!GetTrieValue(g_aWeapons[AMMO], classname, maxammo))
+    if(!GetTrieValue(g_Weapons.m_Ammo, classname, maxammo))
         return;
 
     SetEntProp(client, Prop_Send, "m_iAmmo", maxammo, _, amtype);
@@ -138,40 +144,41 @@ bool GetWeaponClassname(int weapon, char[] classname, int maxLen)
 
 void InitWeapon()
 {
-    g_aWeapons[CLIP] = CreateTrie();
-    g_aWeapons[AMMO] = CreateTrie();
+    g_Weapons.m_Clip = new StringMap();
+    g_Weapons.m_Ammo = new StringMap();
 
-    SetTrieValue(g_aWeapons[CLIP], "weapon_ak47"          ,  30); SetTrieValue(g_aWeapons[AMMO], "weapon_ak47"          ,  90);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_aug"           ,  30); SetTrieValue(g_aWeapons[AMMO], "weapon_aug"           ,  90);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_awp"           ,  10); SetTrieValue(g_aWeapons[AMMO], "weapon_awp"           ,  30);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_bizon"         ,  64); SetTrieValue(g_aWeapons[AMMO], "weapon_bizon"         , 120);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_cz75a"         ,  12); SetTrieValue(g_aWeapons[AMMO], "weapon_cz75a"         ,  12);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_deagle"        ,   7); SetTrieValue(g_aWeapons[AMMO], "weapon_deagle"        ,  35);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_elite"         ,  30); SetTrieValue(g_aWeapons[AMMO], "weapon_elite"         , 120);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_famas"         ,  25); SetTrieValue(g_aWeapons[AMMO], "weapon_famas"         ,  90);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_fiveseven"     ,  20); SetTrieValue(g_aWeapons[AMMO], "weapon_fiveseven"     , 100);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_g3sg1"         ,  20); SetTrieValue(g_aWeapons[AMMO], "weapon_g3sg1"         ,  90);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_galilar"       ,  35); SetTrieValue(g_aWeapons[AMMO], "weapon_galilar"       ,  90);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_glock"         ,  20); SetTrieValue(g_aWeapons[AMMO], "weapon_glock"         , 120);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_hkp2000"       ,  13); SetTrieValue(g_aWeapons[AMMO], "weapon_hkp2000"       ,  52);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_m4a1"          ,  30); SetTrieValue(g_aWeapons[AMMO], "weapon_m4a1"          ,  90);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_m4a1_silencer" ,  20); SetTrieValue(g_aWeapons[AMMO], "weapon_m4a1_silencer" ,  60);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_m249"          , 100); SetTrieValue(g_aWeapons[AMMO], "weapon_m249"          , 200);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_mac10"         ,  30); SetTrieValue(g_aWeapons[AMMO], "weapon_mac10"         ,  90);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_mag7"          ,   5); SetTrieValue(g_aWeapons[AMMO], "weapon_mag7"          ,  32);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_mp7"           ,  30); SetTrieValue(g_aWeapons[AMMO], "weapon_mp7"           ,  90);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_mp9"           ,  30); SetTrieValue(g_aWeapons[AMMO], "weapon_mp9"           , 120);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_negev"         , 150); SetTrieValue(g_aWeapons[AMMO], "weapon_negev"         , 200);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_nova"          ,   8); SetTrieValue(g_aWeapons[AMMO], "weapon_nova"          ,  32);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_p90"           ,  50); SetTrieValue(g_aWeapons[AMMO], "weapon_p90"           , 100);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_p250"          ,  13); SetTrieValue(g_aWeapons[AMMO], "weapon_p250"          ,  26);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_revolver"      ,   8); SetTrieValue(g_aWeapons[AMMO], "weapon_revolver"      ,   8);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_sawedoff"      ,   7); SetTrieValue(g_aWeapons[AMMO], "weapon_sawedoff"      ,  32);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_sg556"         ,  30); SetTrieValue(g_aWeapons[AMMO], "weapon_sg556"         ,  90);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_ssg08"         ,  10); SetTrieValue(g_aWeapons[AMMO], "weapon_ssg08"         ,  30);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_tec9"          ,  18); SetTrieValue(g_aWeapons[AMMO], "weapon_tec9"          , 120);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_ump45"         ,  25); SetTrieValue(g_aWeapons[AMMO], "weapon_ump45"         ,  75);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_usp_silencer"  ,  12); SetTrieValue(g_aWeapons[AMMO], "weapon_usp_silencer"  ,  24);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_xm1014"        ,   7); SetTrieValue(g_aWeapons[AMMO], "weapon_xm1014"        ,  32);
-    SetTrieValue(g_aWeapons[CLIP], "weapon_scar20"        ,  20); SetTrieValue(g_aWeapons[AMMO], "weapon_scar20"        ,  90);
+    g_Weapons.m_Clip.SetValue("weapon_ak47"          ,  30); g_Weapons.m_Ammo.SetValue("weapon_ak47"          ,  90);
+    g_Weapons.m_Clip.SetValue("weapon_aug"           ,  30); g_Weapons.m_Ammo.SetValue("weapon_aug"           ,  90);
+    g_Weapons.m_Clip.SetValue("weapon_awp"           ,  10); g_Weapons.m_Ammo.SetValue("weapon_awp"           ,  30);
+    g_Weapons.m_Clip.SetValue("weapon_bizon"         ,  64); g_Weapons.m_Ammo.SetValue("weapon_bizon"         , 120);
+    g_Weapons.m_Clip.SetValue("weapon_cz75a"         ,  12); g_Weapons.m_Ammo.SetValue("weapon_cz75a"         ,  12);
+    g_Weapons.m_Clip.SetValue("weapon_deagle"        ,   7); g_Weapons.m_Ammo.SetValue("weapon_deagle"        ,  35);
+    g_Weapons.m_Clip.SetValue("weapon_elite"         ,  30); g_Weapons.m_Ammo.SetValue("weapon_elite"         , 120);
+    g_Weapons.m_Clip.SetValue("weapon_famas"         ,  25); g_Weapons.m_Ammo.SetValue("weapon_famas"         ,  90);
+    g_Weapons.m_Clip.SetValue("weapon_fiveseven"     ,  20); g_Weapons.m_Ammo.SetValue("weapon_fiveseven"     , 100);
+    g_Weapons.m_Clip.SetValue("weapon_g3sg1"         ,  20); g_Weapons.m_Ammo.SetValue("weapon_g3sg1"         ,  90);
+    g_Weapons.m_Clip.SetValue("weapon_galilar"       ,  35); g_Weapons.m_Ammo.SetValue("weapon_galilar"       ,  90);
+    g_Weapons.m_Clip.SetValue("weapon_glock"         ,  20); g_Weapons.m_Ammo.SetValue("weapon_glock"         , 120);
+    g_Weapons.m_Clip.SetValue("weapon_hkp2000"       ,  13); g_Weapons.m_Ammo.SetValue("weapon_hkp2000"       ,  52);
+    g_Weapons.m_Clip.SetValue("weapon_m4a1"          ,  30); g_Weapons.m_Ammo.SetValue("weapon_m4a1"          ,  90);
+    g_Weapons.m_Clip.SetValue("weapon_m4a1_silencer" ,  20); g_Weapons.m_Ammo.SetValue("weapon_m4a1_silencer" ,  60);
+    g_Weapons.m_Clip.SetValue("weapon_m249"          , 100); g_Weapons.m_Ammo.SetValue("weapon_m249"          , 200);
+    g_Weapons.m_Clip.SetValue("weapon_mac10"         ,  30); g_Weapons.m_Ammo.SetValue("weapon_mac10"         ,  90);
+    g_Weapons.m_Clip.SetValue("weapon_mag7"          ,   5); g_Weapons.m_Ammo.SetValue("weapon_mag7"          ,  32);
+    g_Weapons.m_Clip.SetValue("weapon_mp5sd"         ,  30); g_Weapons.m_Ammo.SetValue("weapon_mp5sd"         , 120);
+    g_Weapons.m_Clip.SetValue("weapon_mp7"           ,  30); g_Weapons.m_Ammo.SetValue("weapon_mp7"           ,  90);
+    g_Weapons.m_Clip.SetValue("weapon_mp9"           ,  30); g_Weapons.m_Ammo.SetValue("weapon_mp9"           , 120);
+    g_Weapons.m_Clip.SetValue("weapon_negev"         , 150); g_Weapons.m_Ammo.SetValue("weapon_negev"         , 200);
+    g_Weapons.m_Clip.SetValue("weapon_nova"          ,   8); g_Weapons.m_Ammo.SetValue("weapon_nova"          ,  32);
+    g_Weapons.m_Clip.SetValue("weapon_p90"           ,  50); g_Weapons.m_Ammo.SetValue("weapon_p90"           , 100);
+    g_Weapons.m_Clip.SetValue("weapon_p250"          ,  13); g_Weapons.m_Ammo.SetValue("weapon_p250"          ,  26);
+    g_Weapons.m_Clip.SetValue("weapon_revolver"      ,   8); g_Weapons.m_Ammo.SetValue("weapon_revolver"      ,   8);
+    g_Weapons.m_Clip.SetValue("weapon_sawedoff"      ,   7); g_Weapons.m_Ammo.SetValue("weapon_sawedoff"      ,  32);
+    g_Weapons.m_Clip.SetValue("weapon_sg556"         ,  30); g_Weapons.m_Ammo.SetValue("weapon_sg556"         ,  90);
+    g_Weapons.m_Clip.SetValue("weapon_ssg08"         ,  10); g_Weapons.m_Ammo.SetValue("weapon_ssg08"         ,  30);
+    g_Weapons.m_Clip.SetValue("weapon_tec9"          ,  18); g_Weapons.m_Ammo.SetValue("weapon_tec9"          , 120);
+    g_Weapons.m_Clip.SetValue("weapon_ump45"         ,  25); g_Weapons.m_Ammo.SetValue("weapon_ump45"         ,  75);
+    g_Weapons.m_Clip.SetValue("weapon_usp_silencer"  ,  12); g_Weapons.m_Ammo.SetValue("weapon_usp_silencer"  ,  24);
+    g_Weapons.m_Clip.SetValue("weapon_xm1014"        ,   7); g_Weapons.m_Ammo.SetValue("weapon_xm1014"        ,  32);
+    g_Weapons.m_Clip.SetValue("weapon_scar20"        ,  20); g_Weapons.m_Ammo.SetValue("weapon_scar20"        ,  90);
 }
